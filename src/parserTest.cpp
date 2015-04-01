@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -14,7 +14,7 @@ int main() {
 	 * Lexer Test
 	 */
 	mLexer* lexer = mLexerInit();
-	string str = "#include \"file\" int main(void) { int a = 123, b = 456; a = b; return 0; }";
+	string str = "#include \"file\" int main(void) { int a = 123; double b = 456; a = b; return 0; }";
     lexer->process(str);
     cout <<str <<endl;
     lexer->printTokenStream();

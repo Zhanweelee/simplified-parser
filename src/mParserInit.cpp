@@ -18,6 +18,8 @@ mParser* mParserInit() {
 	mGrammar* statement = new mGrammar(STATEMENT);
 
 	mGrammar* value = new mGrammar(VALUE);
+	mGrammar* value_1 = new mGrammar(VALUE);
+	mGrammar* value_2 = new mGrammar(VALUE);
 	mGrammar* def_stmt = new mGrammar(DEF_STMT);
 	mGrammar* assign_stmt = new mGrammar(ASSIGN_STMT);
 	mGrammar* ret_stmt = new mGrammar(RET_STMT);
@@ -78,24 +80,20 @@ mParser* mParserInit() {
 
 
 	/*
-	 * statement_list -> statement statement_list_
-	 * statement_list_ -> statement statement_list_ | epsilon
-	 * 
+	 * statement_list -> statement statement_list | epsilon
+	 *
 	 * statement -> def_stmt | assign_stmt | ret_stmt | epsilon
-	 * def_stmt -> ret_type id = num;
+	 * def_stmt -> ret_type id = value;
 	 * assign_stmt -> id = value;
 	 * value -> num | id
 	 * ret_stmt -> return value;
 	 */
-	statement_list->subGrammars.push_back(statement);
-	statement_list->subGrammars.push_back(statement_list_);
-
-	statement_list_->isRaw = false;
-	statement_list_->subGrammars.push_back(statement_list_1);
-	statement_list_->subGrammars.push_back(statement_list_2);
+	statement_list->isRaw = false;
+	statement_list->subGrammars.push_back(statement_list_1);
+	statement_list->subGrammars.push_back(statement_list_2);
 
 	statement_list_1->subGrammars.push_back(statement);
-	statement_list_1->subGrammars.push_back(statement_list_);
+	statement_list_1->subGrammars.push_back(statement_list);
 
 	statement_list_2->subGrammars.push_back(t_epsilon);
 
@@ -103,12 +101,11 @@ mParser* mParserInit() {
 	statement->subGrammars.push_back(def_stmt);
 	statement->subGrammars.push_back(assign_stmt);
 	statement->subGrammars.push_back(ret_stmt);
-	statement->subGrammars.push_back(t_epsilon);
 
 	def_stmt->subGrammars.push_back(ret_type);
 	def_stmt->subGrammars.push_back(t_id);
 	def_stmt->subGrammars.push_back(t_assign);
-	def_stmt->subGrammars.push_back(t_num);
+	def_stmt->subGrammars.push_back(value);
 	def_stmt->subGrammars.push_back(t_semicolon);
 
 	assign_stmt->subGrammars.push_back(t_id);
@@ -121,12 +118,16 @@ mParser* mParserInit() {
 	ret_stmt->subGrammars.push_back(t_semicolon);
 
 	/*
-	* value-> int | double
+	* value-> value_1 | value_2
+	* value_1 -> t_num
+	* value_2 -> t_id
 	*/
 	value->isRaw = false;
-	value->subGrammars.push_back(t_int);
-	value->subGrammars.push_back(t_double);
+	value->subGrammars.push_back(value_1);
+	value->subGrammars.push_back(value_2);
 
+	value_1->subGrammars.push_back(t_num);
+	value_2->subGrammars.push_back(t_id);
 
 	/*
 	 * func_def -> ret_type id (param_list) { statement_list }

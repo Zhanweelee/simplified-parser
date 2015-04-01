@@ -50,7 +50,7 @@ bool mParser::process (vector<mToken> tokens) {
     }
 	return true;
 }
-    
+
 // 语法分析函数，需要同名函数的初始化再调用
 void mParser::process () {
     errPos = -1;
@@ -61,7 +61,7 @@ void mParser::process () {
     nList.push_back(root);
     while (nextToken < tokenStream + tokenNum) {
         int tokenType = nextToken->type;
-		
+
 		if (tokenType == NL) {
 			++ lineCount;
 			++ nextToken;
@@ -72,7 +72,6 @@ void mParser::process () {
         nList.pop_front();
         mGrammar* top = pStack.top();
         pStack.pop();
-
         if (top->isTerminal == false) {
             if (top->isRaw == false) {
 				bool isFoundGrammar = false, hasEpsilon = false;
@@ -222,7 +221,7 @@ void mParser::printTree (mASTNode* root, string prefix) {
                 cout <<prefix <<"├" <<"Token ('" <<node->token->text <<"')" <<endl;
             }
         }
-            
+
     }
 
 }
