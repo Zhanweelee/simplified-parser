@@ -1,6 +1,3 @@
-#include <string>
-#include <map>
-using namespace std;
 
 #include "mLexer.h"
 #include "mParser.h"
